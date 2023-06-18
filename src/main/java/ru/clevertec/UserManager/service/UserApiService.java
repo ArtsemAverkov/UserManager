@@ -1,32 +1,56 @@
 package ru.clevertec.UserManager.service;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.clevertec.UserManager.dto.UserDto;
+import ru.clevertec.UserManager.dto.UserRequestDto;
 import ru.clevertec.UserManager.entity.Role;
 import ru.clevertec.UserManager.entity.User;
 import ru.clevertec.UserManager.repository.UserRepository;
-import ru.clevertec.UserManager.entity.UserRole;
+import ru.clevertec.UserManager.security.JwtTokenParser;
+import ru.clevertec.UserManager.service.role.RoleService;
 
-import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class UserApiService implements UserService{
 
     private final UserRepository userRepository;
-    @Override
-    public User findByName(String name) {
-        return userRepository.findByName(name);
+    private final JwtTokenParser jwtTokenParser;
+    private final RoleService roleApiService;
 
-//                .orElseThrow(() ->
-//                new IllegalArgumentException("User not found for id"+ id));
+
+    @Override
+    public User authenticateUserWithToken(String token) {
+        Jws<Claims> claims = jwtTokenParser.validateToken(token);
+        if (Objects.isNull(claims)) {
+            throw new IllegalArgumentException("Token with value '" + token + "' not found");
+        }
+        String username = claims.getBody().getSubject();
+        return userRepository.findByName(username);
     }
 
     @Override
-    public Long create(UserDto user) {
-        User buildUser = buildCreateUser(user);
-        return userRepository.save(buildUser).getId();
+    public User findByName(String name) {
+        User user = userRepository.findByName(name);
+        if (Objects.isNull(user)) {
+            throw new IllegalArgumentException("User with name '" + name + "' not found");
+        }
+        return user;
+    }
+
+    @Override
+    public Long create(UserRequestDto userRequestDto) {
+        int activeUserName = userRepository.existActiveUserName(userRequestDto.getUsername());
+        if (activeUserName>0) {
+            throw new IllegalArgumentException("User with name '" + userRequestDto.getUsername() + "' already exists");
+        }
+        Role roleByName = roleApiService.findRoleByName(userRequestDto.getRole());
+        User buildUser = buildCreateUser(userRequestDto);
+            buildUser.setRole(roleByName);
+            return userRepository.save(buildUser).getId();
     }
 
     @Override
@@ -36,24 +60,10 @@ public class UserApiService implements UserService{
         return true;
     }
 
-    @Override
-    public List<User> readAll() {
-        return userRepository.findAll();
-    }
-
-    private User buildCreateUser(UserDto userDto){
+    private User buildCreateUser(UserRequestDto userRequestDto){
         return User.builder()
-                .username(userDto.getUsername())
-                .password(userDto.getPassword())
-                .role(new Role(UserRole.SUBSCRIBER.getName()))
-                .build();
-    }
-
-    private User buildUpdateUser(UserDto userDto,  Role roles){
-        return User.builder()
-                .username(userDto.getUsername())
-                .password(userDto.getPassword())
-                .role(roles)
+                .username(userRequestDto.getUsername())
+                .password(userRequestDto.getPassword())
                 .build();
     }
 }

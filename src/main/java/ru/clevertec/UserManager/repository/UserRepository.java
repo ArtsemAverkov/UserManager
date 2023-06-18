@@ -8,4 +8,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "select * from users where username =:name", nativeQuery = true)
     User findByName(String name);
 
+    @Query(value = "select count(username) from users where username =:name", nativeQuery = true)
+    int existActiveUserName (String name);
 }

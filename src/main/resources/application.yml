@@ -1,17 +1,8 @@
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/artemaverkov
-    username: artemaverkov
-    password: root
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    database: postgresql
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-  liquibase:
-    enabled: true
-    change-log: classpath:db/changelog/changelog.xml
 server:
-  port: 8090
+  port: 8084
+spring:
+  application:
+    name: user-api
+  config:
+    import: optional:configserver:http://localhost:8086
+

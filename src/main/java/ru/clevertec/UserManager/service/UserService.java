@@ -1,14 +1,13 @@
 package ru.clevertec.UserManager.service;
 
-import ru.clevertec.UserManager.dto.UserDto;
+import ru.clevertec.UserManager.dto.UserRequestDto;
 import ru.clevertec.UserManager.entity.User;
 
-import java.util.List;
 
 public interface UserService {
     User findByName(String name);
-    Long create(UserDto user);
+    Long create(UserRequestDto userRequestDto);
     boolean delete(String name);
-    List<User> readAll();
+    User authenticateUserWithToken (String token);
 
 }

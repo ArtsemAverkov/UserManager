@@ -1,0 +1,30 @@
+{
+  "name": "user-api",
+  "profiles": [
+    "default"
+  ],
+  "label": null,
+  "version": null,
+  "state": null,
+  "propertySources": [
+    {
+      "name": "classpath:/configs/user-api/user-api.yml",
+      "source": {
+        "spring.application.name": "user-api",
+        "spring.datasource.url": "jdbc:postgresql://localhost:5432/artemaverkov",
+        "spring.datasource.username": "artemaverkov",
+        "spring.datasource.password": "root",
+        "spring.datasource.driver-class-name": "org.postgresql.Driver",
+        "spring.jpa.database": "postgresql",
+        "spring.jpa.database-platform": "org.hibernate.dialect.PostgreSQLDialect",
+        "spring.jpa.hibernate.ddl-auto": "update",
+        "spring.jpa.show-sql": true,
+        "spring.liquibase.enabled": true,
+        "spring.liquibase.change-log": "classpath:db/changelog/changelog.xml",
+        "spring.security.oauth2.client.registration.google.client-id": "193430038350-g9i5on14tnkuekrcuf8utuvb0e8lcjff.apps.googleusercontent.com",
+        "spring.security.oauth2.client.registration.google.client-secret": "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",
+        "spring.security.oauth2.client.registration.google.scope": "openid"
+      }
+    }
+  ]
+}

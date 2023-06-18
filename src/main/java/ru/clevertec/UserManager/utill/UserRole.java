@@ -1,4 +1,4 @@
-package ru.clevertec.UserManager.entity;
+package ru.clevertec.UserManager.utill;
 
 public enum UserRole {
     ADMIN("ADMIN"),
