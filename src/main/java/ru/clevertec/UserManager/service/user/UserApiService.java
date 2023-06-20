@@ -1,4 +1,4 @@
-package ru.clevertec.UserManager.service;
+package ru.clevertec.UserManager.service.user;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -13,6 +13,9 @@ import ru.clevertec.UserManager.service.role.RoleService;
 
 import java.util.Objects;
 
+/**
+ * Service class for managing users.
+ */
 @Service
 @RequiredArgsConstructor
 public class UserApiService implements UserService{
@@ -21,7 +24,12 @@ public class UserApiService implements UserService{
     private final JwtTokenParser jwtTokenParser;
     private final RoleService roleApiService;
 
-
+    /**
+     * Authenticates a user with the provided token.
+     * @param token the token to authenticate the user
+     * @return the authenticated user
+     * @throws IllegalArgumentException if the token is invalid or not found
+     */
     @Override
     public User authenticateUserWithToken(String token) {
         Jws<Claims> claims = jwtTokenParser.validateToken(token);
@@ -32,6 +40,12 @@ public class UserApiService implements UserService{
         return userRepository.findByName(username);
     }
 
+    /**
+     * Finds a user by their name.
+     * @param name the name of the user
+     * @return the found user
+     * @throws IllegalArgumentException if the user with the specified name is not found
+     */
     @Override
     public User findByName(String name) {
         User user = userRepository.findByName(name);
@@ -41,8 +55,17 @@ public class UserApiService implements UserService{
         return user;
     }
 
+    /**
+     * Creates a new user with the provided user request data.
+     * @param userRequestDto the user request data
+     * @return the ID of the created user
+     * @throws IllegalArgumentException if the specified role is invalid or already exists
+     */
     @Override
     public Long create(UserRequestDto userRequestDto) {
+        if (Objects.equals(userRequestDto.getRole(), "ADMIN")){
+            throw new IllegalArgumentException("Role with name '" + userRequestDto.getRole() + "' cannot be used");
+        }
         int activeUserName = userRepository.existActiveUserName(userRequestDto.getUsername());
         if (activeUserName>0) {
             throw new IllegalArgumentException("User with name '" + userRequestDto.getUsername() + "' already exists");
@@ -53,6 +76,11 @@ public class UserApiService implements UserService{
             return userRepository.save(buildUser).getId();
     }
 
+    /**
+     * Deletes a user with the specified name.
+     * @param name the name of the user to delete
+     * @return true if the user is deleted successfully, false otherwise
+     */
     @Override
     public boolean delete(String name) {
         User byName = findByName(name);
@@ -60,6 +88,11 @@ public class UserApiService implements UserService{
         return true;
     }
 
+    /**
+     * Builds a new user based on the provided user request data.
+     * @param userRequestDto the user request data
+     * @return the built user
+     */
     private User buildCreateUser(UserRequestDto userRequestDto){
         return User.builder()
                 .username(userRequestDto.getUsername())

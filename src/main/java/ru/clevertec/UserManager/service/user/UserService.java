@@ -1,4 +1,4 @@
-package ru.clevertec.UserManager.service;
+package ru.clevertec.UserManager.service.user;
 
 import ru.clevertec.UserManager.dto.UserRequestDto;
 import ru.clevertec.UserManager.entity.User;

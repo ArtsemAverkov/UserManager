@@ -7,12 +7,20 @@ import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+/**
+ * Component class for parsing and validating JWT tokens.
+ */
 @Component
 public class JwtTokenParser {
 
     @Value("${spring.security.oauth2.client.registration.google.client-secret}")
     private String secretKey;
 
+    /**
+     * Validates a JWT token and returns the parsed claims.
+     * @param token the JWT token to validate
+     * @return the parsed claims if the token is valid, null otherwise
+     */
     public Jws<Claims> validateToken(String token) {
         try {
 //            @Value("${spring.security.oauth2.client.registration.google.client-secret}")

@@ -1,21 +1,23 @@
 package ru.clevertec.UserManager.common.integration;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.jdbc.Sql;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import ru.clevertec.UserManager.common.WireMockInitializer;
 import ru.clevertec.UserManager.common.extension.user.ValidParameterResolverUser;
 import ru.clevertec.UserManager.common.utill.UserBuild;
 import ru.clevertec.UserManager.dto.UserRequestDto;
 import ru.clevertec.UserManager.entity.User;
 import ru.clevertec.UserManager.repository.UserRepository;
 
-
+/**
+ * Integration test class for the UserRepository.
+ */
 @DataJpaTest
 @Testcontainers
 @ExtendWith(ValidParameterResolverUser.class)
@@ -29,6 +31,20 @@ public class UserPostgresQLRepositoryTest extends TestContainerInitializer{
     @Autowired
     private  TestEntityManager testEntityManager;
 
+    @BeforeAll
+    static void setup() {
+        WireMockInitializer.setup();
+    }
+
+    @AfterAll
+    static void teardown() {
+        WireMockInitializer.teardown();
+    }
+
+    /**
+     * Tests the existence of an active user name in the UserRepository.
+     * @param userDto the user request DTO
+     */
     @Test
     void shouldExistActiveUserName(UserRequestDto userDto){
         int activeUserName = userRepository.existActiveUserName(userDto.getUsername());
@@ -37,10 +53,16 @@ public class UserPostgresQLRepositoryTest extends TestContainerInitializer{
        Assertions.assertEquals(1, activeUserName);
     }
 
+    /**
+     * Tests finding a user by username in the UserRepository.
+     * @param userDto the user request DTO
+     */
     @Test
     void shouldFindByUserName(UserRequestDto userDto){
         User userRepositoryByName = userRepository.findByName(userDto.getUsername());
+        System.out.println("userRepositoryByName = " + userRepositoryByName);
         User buildUser = UserBuild.buildUserWithId(userDto);
+        System.out.println("buildUser = " + buildUser);
         testEntityManager.flush();
         testEntityManager.getEntityManager().getTransaction().commit();
         Assertions.assertEquals(userRepositoryByName, buildUser );

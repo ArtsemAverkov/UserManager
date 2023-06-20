@@ -13,7 +13,6 @@
 - `src`: Исходный код проекта
 - `docs`: Документация
 - `docker`: Файлы Docker для контейнеризации приложения и базы данных
-- `config`: Файлы конфигурации
 
 == Запуск проекта
 
@@ -23,7 +22,7 @@
 
 [source,bash]
 ----
-$ git clone https://github.com/your-repo/project.git
+$ git clone https://github.com/ArtsemAverkov/NewsManager.git
 ----
 
 2. Перейдите в директорию проекта:
@@ -59,6 +58,6 @@ $ docker-compose up
 
 == Заключение
 
-Дополнительные вопросы или замечания можно отправить по адресу `your-email@example.com`.
+Дополнительные вопросы или замечания можно отправить по адресу `https://www.linkedin.com/in/артем-аверков-aa7663239/`.
 
 Спасибо за внимание!

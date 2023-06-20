@@ -2,7 +2,6 @@ package ru.clevertec.UserManager.common.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,7 @@ import ru.clevertec.UserManager.entity.Role;
 import ru.clevertec.UserManager.entity.User;
 import ru.clevertec.UserManager.repository.UserRepository;
 import ru.clevertec.UserManager.security.JwtTokenParser;
-import ru.clevertec.UserManager.service.UserApiService;
+import ru.clevertec.UserManager.service.user.UserApiService;
 import ru.clevertec.UserManager.common.utill.RequestId;
 import ru.clevertec.UserManager.service.role.RoleService;
 
@@ -31,8 +30,15 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.mock;
 import static ru.clevertec.UserManager.common.utill.UserBuild.*;
 
+/**
+ * Unit test class for the UserApiService implementation.
+ */
 @DisplayName("User Service Test")
 public class UserServiceImplTest {
+
+    /**
+     * Nested test class for valid data scenarios.
+     */
     @Nested
     @ExtendWith({MockitoExtension.class, ValidParameterResolverUser.class})
     public class ValidData {
@@ -49,7 +55,10 @@ public class UserServiceImplTest {
         @Mock
         private RoleService roleService;
 
-
+        /**
+         * Tests the findByName method of UserApiService when the user is valid.
+         * @param userDto the user request DTO
+         */
         @Test
         void shouldFindByNameUserWhenUserValid(UserRequestDto userDto) {
             User buildUser = buildUser(userDto);
@@ -59,8 +68,13 @@ public class UserServiceImplTest {
             verify(userRepository, times(1)).findByName(userDto.getUsername());
         }
 
+        /**
+         * Tests the createUser method of UserApiService when the user is valid.
+         * @param userDto the user request DTO
+         */
         @Test
         void shouldCreateUserWhenUserIsValid(UserRequestDto userDto) {
+            userDto.setRole("JOURNALIST");
             Role role = getRole();
             User userForMethodCreate = buildUserWithId(userDto);
             when(roleService.findRoleByName(userDto.getRole())).thenReturn(role);
@@ -68,14 +82,22 @@ public class UserServiceImplTest {
             assertEquals(RequestId.VALUE_1.getValue(), userApiService.create(userDto));
         }
 
+        /**
+         * Tests the existActiveUserName method of UserApiService when the username is active.
+         * @param userDto the user request DTO
+         */
         @Test
         void shouldExistActiveUserNameWhenUserNameIsActive(UserRequestDto userDto) {
+            userDto.setRole("JOURNALIST");
             when(userRepository.existActiveUserName(userDto.getUsername())).thenReturn(1);
             assertThrows(IllegalArgumentException.class, () -> userApiService.create(userDto));
             verify(userRepository, times(1)).existActiveUserName(userDto.getUsername());
         }
 
-
+        /**
+         * Tests the deleteUser method of UserApiService when the user is valid.
+         * @param userDto the user request DTO
+         */
         @Test
         void shouldDeleteUserWhenUserIsValid(UserRequestDto userDto) {
             User buildUser = buildUserWithId(userDto);
@@ -85,6 +107,10 @@ public class UserServiceImplTest {
             verify(userRepository, times(1)).deleteById(RequestId.VALUE_1.getValue());
         }
 
+        /**
+         * Tests the authenticateUserWithToken method of UserApiService with a valid token.
+         * @param userDto the user request DTO
+         */
         @Test
         void testAuthenticateUserWithValidToken(UserRequestDto userDto) {
             User user = buildUserWithId(userDto);
@@ -101,6 +127,9 @@ public class UserServiceImplTest {
         }
     }
 
+    /**
+     * Nested test class for invalid data scenarios.
+     */
     @Nested
     @ExtendWith({MockitoExtension.class, ValidParameterResolverUser.class})
     public class InvalidData {
@@ -111,21 +140,57 @@ public class UserServiceImplTest {
         @Mock
         private UserRepository userRepository;
 
+        @Mock
+        private JwtTokenParser jwtTokenParser;
+
+        /**
+         * Tests the findByName method of UserApiService when the user is invalid.
+         * @param userDto the user request DTO
+         */
         @Test
         void shouldFindByNameUserWhenUserInvalid(UserRequestDto userDto) {
             when(userRepository.findByName(userDto.getUsername()))
                             .thenReturn(null);
             assertThrows(IllegalArgumentException.class,
                     () -> userApiService.findByName(userDto.getUsername()));
-
         }
 
+        /**
+         * Tests the createUser method of UserApiService when the active username already exists.
+         * @param userDto the user request DTO
+         */
         @Test
         void shouldCreateUserWhenExistActiveUserNameInvalid(UserRequestDto userDto) {
+            userDto.setRole("JOURNALIST");
             when(userRepository.existActiveUserName(userDto.getUsername())).thenReturn(1);
             assertThrows(IllegalArgumentException.class,
                     () -> userApiService.create(userDto));
+        }
 
+        /**
+         * Tests the createUser method of UserApiService when the active userRole is exists.
+         * @param userDto the user request DTO
+         */
+        @Test
+        void shouldCreateUserWhenUserRoleIsInvalid(UserRequestDto userDto) {
+            userDto.setRole("ADMIN");
+            IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class,
+                    () -> userApiService.create(userDto));
+            System.out.println("illegalArgumentException = " + illegalArgumentException);
+            assertEquals("Role with name '" + userDto.getRole() + "' cannot be used",
+                    illegalArgumentException.getMessage());
+        }
+
+        /**
+         * Tests the authenticateUserWithToken method of UserApiService with an invalid token.
+         * @param userDto the user request DTO
+         */
+        @Test
+        void testAuthenticateUserWhenTokenIsInvalid(UserRequestDto userDto) {
+            String validToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiJ9.eyJleHAiOjE2MzE4NjYxNTl9";
+            when(jwtTokenParser.validateToken(validToken)).thenReturn(null);
+            assertThrows(IllegalArgumentException.class,
+                    () -> userApiService.authenticateUserWithToken(validToken));
         }
     }
 }

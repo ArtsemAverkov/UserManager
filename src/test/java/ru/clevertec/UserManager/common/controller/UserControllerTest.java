@@ -22,7 +22,7 @@ import ru.clevertec.UserManager.controller.UserController;
 import ru.clevertec.UserManager.dto.UserRequestDto;
 import ru.clevertec.UserManager.entity.User;
 import ru.clevertec.UserManager.security.SecurityConfig;
-import ru.clevertec.UserManager.service.UserService;
+import ru.clevertec.UserManager.service.user.UserService;
 import ru.clevertec.UserManager.common.utill.RequestId;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -34,6 +34,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static ru.clevertec.UserManager.common.utill.UserBuild.getContent;
 
+/**
+ * Test class for the UserController.
+ */
 @ContextConfiguration(classes = UserManagerApplication.class)
 @WebMvcTest({UserController.class, SecurityConfig.class})
 @ExtendWith(ValidParameterResolverUser.class)
@@ -57,6 +60,11 @@ public class UserControllerTest {
         WireMockInitializer.teardown();
     }
 
+    /**
+     * Tests the create method of the UserController.
+     * @param userDto the user request DTO
+     * @throws Exception if an error occurs during the test
+     */
     @Test
     public void create(UserRequestDto userDto) throws Exception {
         when(userService.create(any(UserRequestDto.class))).thenReturn(RequestId.VALUE_1.getValue());
@@ -68,6 +76,11 @@ public class UserControllerTest {
         verify(userService).create(any(UserRequestDto.class));
     }
 
+    /**
+     * Tests the delete method of the UserController.
+     * @param userDto the user request DTO
+     * @throws Exception if an error occurs during the test
+     */
     @Test
     public void delete(UserRequestDto userDto) throws Exception {
         User buildUser = UserBuild.buildUser(userDto);
@@ -78,6 +91,12 @@ public class UserControllerTest {
         verify(userService).delete(userDto.getUsername());
     }
 
+    /**
+     * Tests the authenticateUser method of the UserController.
+     *
+     * @param userDto the user request DTO
+     * @throws Exception if an error occurs during the test
+     */
     @Test
     public void testAuthenticateUser(UserRequestDto userDto) throws Exception {
         String validToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiJ9.eyJleHAiOjE2MzE4NjYxNTl9";

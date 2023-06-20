@@ -19,6 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 import static ru.clevertec.UserManager.common.utill.UserBuild.getRole;
 
+/**
+ * Unit test class for the RoleApiService implementation.
+ */
 @DisplayName("Role Service Test")
 public class RoleServiceImplTest {
 
@@ -29,11 +32,17 @@ public class RoleServiceImplTest {
     @Mock
     private RoleRepository roleRepository;
 
-
+    /**
+     * Nested test class for valid data scenarios.
+     */
     @Nested
     @ExtendWith({MockitoExtension.class, ValidParameterResolverUser.class})
     public class ValidData {
 
+        /**
+         * Tests the findRoleByName method of RoleApiService when the user is valid.
+         * @param userDto the user request DTO
+         */
         @Test
         void shouldFindByNameUserWhenUserValid(UserRequestDto userDto) {
             Role role = getRole();
@@ -45,6 +54,9 @@ public class RoleServiceImplTest {
 
     }
 
+    /**
+     * Nested test class for invalid data scenarios.
+     */
     @Nested
     @ExtendWith({MockitoExtension.class, ValidParameterResolverUser.class})
     public class InvalidData {
@@ -52,10 +64,13 @@ public class RoleServiceImplTest {
         @InjectMocks
         private RoleApiService roleApiService;
 
-
         @Mock
         private RoleRepository roleRepository;
 
+        /**
+         * Tests the findRoleByName method of RoleApiService when the user is invalid.
+         * @param userDto the user request DTO
+         */
         @Test
         void shouldFindByNameUserWhenUserValid(UserRequestDto userDto) {
             when(roleRepository.findRoleByName(userDto.getRole()))
