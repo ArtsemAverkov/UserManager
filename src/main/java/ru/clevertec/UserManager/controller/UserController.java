@@ -3,6 +3,7 @@ package ru.clevertec.UserManager.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import ru.clevertec.UserManager.dto.UserRequestDto;
+import ru.clevertec.UserManager.dto.UserRequestProtos;
 import ru.clevertec.UserManager.entity.User;
 import ru.clevertec.UserManager.service.user.UserService;
 
@@ -30,9 +31,9 @@ public class UserController {
      * @param userDto the UserRequestDto containing the user details
      * @return the ID of the created user
      */
-    @PostMapping(value = "/create")
+    @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public Long create(@RequestBody @Valid UserRequestDto userDto){
+    public Long create(@RequestBody @Valid UserRequestProtos.UserRequestDto userDto){
          return userService.create(userDto);
     }
 

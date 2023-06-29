@@ -3,8 +3,12 @@ package ru.clevertec.UserManager.service.user;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import ru.clevertec.UserManager.dto.UserRequestDto;
+import ru.clevertec.UserManager.dto.UserRequestProtos;
 import ru.clevertec.UserManager.entity.Role;
 import ru.clevertec.UserManager.entity.User;
 import ru.clevertec.UserManager.repository.UserRepository;
@@ -62,7 +66,7 @@ public class UserApiService implements UserService{
      * @throws IllegalArgumentException if the specified role is invalid or already exists
      */
     @Override
-    public Long create(UserRequestDto userRequestDto) {
+    public Long create(UserRequestProtos.UserRequestDto userRequestDto) {
         if (Objects.equals(userRequestDto.getRole(), "ADMIN")){
             throw new IllegalArgumentException("Role with name '" + userRequestDto.getRole() + "' cannot be used");
         }
@@ -82,10 +86,22 @@ public class UserApiService implements UserService{
      * @return true if the user is deleted successfully, false otherwise
      */
     @Override
+    @PreAuthorize("isAuthenticated()")
     public boolean delete(String name) {
-        User byName = findByName(name);
-        userRepository.deleteById(byName.getId());
-        return true;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.isAuthenticated()) {
+            User byName = findByName(name);
+            if (byName.getUsername().equals(authentication.getName())) {
+                userRepository.deleteById(byName.getId());
+                return true;
+            } else {
+                throw new AccessDeniedException(
+                        "You cannot delete a user because you are not one");
+            }
+        } else {
+            throw new AccessDeniedException(
+                    "You are not an authorized user, please login or register");
+        }
     }
 
     /**
@@ -93,7 +109,7 @@ public class UserApiService implements UserService{
      * @param userRequestDto the user request data
      * @return the built user
      */
-    private User buildCreateUser(UserRequestDto userRequestDto){
+    private User buildCreateUser(UserRequestProtos.UserRequestDto userRequestDto){
         return User.builder()
                 .username(userRequestDto.getUsername())
                 .password(userRequestDto.getPassword())

@@ -49,6 +49,7 @@ public class RolePostgresQlRepositoryTest extends TestContainerInitializer{
      * Tests the existence of an active user name in the RoleRepository.
      * @param userDto the user request DTO
      */
+    @Sql("/INITIAL_DB_SCRIPT.sql")
     @Test
     void shouldExistActiveUserName(UserRequestDto userDto){
         System.out.println("userDto = " + userDto);
