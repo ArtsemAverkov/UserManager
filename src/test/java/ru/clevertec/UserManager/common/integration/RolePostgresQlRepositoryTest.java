@@ -13,7 +13,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import ru.clevertec.UserManager.common.WireMockInitializer;
 import ru.clevertec.UserManager.common.extension.user.ValidParameterResolverUser;
-import ru.clevertec.UserManager.dto.UserRequestDto;
+import ru.clevertec.UserManager.dto.UserRequestProtos;
 import ru.clevertec.UserManager.entity.Role;
 import ru.clevertec.UserManager.repository.RoleRepository;
 
@@ -51,7 +51,7 @@ public class RolePostgresQlRepositoryTest extends TestContainerInitializer{
      */
     @Sql("/INITIAL_DB_SCRIPT.sql")
     @Test
-    void shouldExistActiveUserName(UserRequestDto userDto){
+    void shouldExistActiveUserName(UserRequestProtos.UserRequestDto userDto){
         System.out.println("userDto = " + userDto);
         Role roleByName = roleRepository.findRoleByName(userDto.getRole());
         testEntityManager.flush();

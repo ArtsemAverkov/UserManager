@@ -9,7 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.clevertec.UserManager.common.extension.user.ValidParameterResolverUser;
-import ru.clevertec.UserManager.dto.UserRequestDto;
+import ru.clevertec.UserManager.dto.UserRequestProtos;
 import ru.clevertec.UserManager.entity.Role;
 import ru.clevertec.UserManager.repository.RoleRepository;
 import ru.clevertec.UserManager.service.role.RoleApiService;
@@ -44,7 +44,7 @@ public class RoleServiceImplTest {
          * @param userDto the user request DTO
          */
         @Test
-        void shouldFindByNameUserWhenUserValid(UserRequestDto userDto) {
+        void shouldFindByNameUserWhenUserValid(UserRequestProtos.UserRequestDto userDto) {
             Role role = getRole();
             when(roleRepository.findRoleByName(userDto.getRole()))
                     .thenReturn(role);
@@ -72,7 +72,7 @@ public class RoleServiceImplTest {
          * @param userDto the user request DTO
          */
         @Test
-        void shouldFindByNameUserWhenUserValid(UserRequestDto userDto) {
+        void shouldFindByNameUserWhenUserValid(UserRequestProtos.UserRequestDto userDto) {
             when(roleRepository.findRoleByName(userDto.getRole()))
                     .thenReturn(null);
             assertThrows(IllegalArgumentException.class,

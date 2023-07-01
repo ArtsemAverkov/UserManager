@@ -39,11 +39,13 @@ dependencies {
 	implementation 'org.liquibase:liquibase-core:4.22.0'
 	implementation 'org.liquibase:liquibase-groovy-dsl:3.0.3'
 
+	implementation group: 'ru.clevertec', name: 'exception-handler-spring-boot-starter', version: '0.2.1'
+
 	implementation 'com.google.protobuf:protobuf-java:3.22.2'
 	runtimeOnly group: 'com.google.protobuf', name: 'protobuf-java-util', version: '3.22.2'
 	implementation group: 'com.hubspot.jackson', name: 'jackson-datatype-protobuf', version: '0.9.13'
 
-
+	testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation group: 'com.github.tomakehurst', name: 'wiremock', version: '3.0.0-beta-10'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'

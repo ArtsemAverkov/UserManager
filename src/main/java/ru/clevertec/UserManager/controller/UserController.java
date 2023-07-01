@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import ru.clevertec.UserManager.dto.UserRequestProtos;
 import ru.clevertec.UserManager.entity.User;
 import ru.clevertec.UserManager.service.user.UserService;
+import ru.clevertec.exceptionhandlerspringbootstarter.EnableExceptionHandling;
 
 /**
  * Controller class that handles user-related operations.
@@ -22,6 +23,7 @@ import ru.clevertec.UserManager.service.user.UserService;
 @RestController
 @RequestMapping(value = "/users")
 @RequiredArgsConstructor
+@EnableExceptionHandling
 public class UserController {
 
     private final UserService userService;

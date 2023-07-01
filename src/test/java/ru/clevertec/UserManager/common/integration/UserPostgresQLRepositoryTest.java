@@ -6,12 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.jdbc.Sql;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import ru.clevertec.UserManager.common.WireMockInitializer;
 import ru.clevertec.UserManager.common.extension.user.ValidParameterResolverUser;
 import ru.clevertec.UserManager.common.utill.UserBuild;
-import ru.clevertec.UserManager.dto.UserRequestDto;
+import ru.clevertec.UserManager.dto.UserRequestProtos;
 import ru.clevertec.UserManager.entity.User;
 import ru.clevertec.UserManager.repository.UserRepository;
 
@@ -46,7 +45,7 @@ public class UserPostgresQLRepositoryTest extends TestContainerInitializer{
      * @param userDto the user request DTO
      */
     @Test
-    void shouldExistActiveUserName(UserRequestDto userDto){
+    void shouldExistActiveUserName(UserRequestProtos.UserRequestDto userDto){
         int activeUserName = userRepository.existActiveUserName(userDto.getUsername());
         testEntityManager.flush();
         testEntityManager.getEntityManager().getTransaction().commit();
@@ -58,7 +57,7 @@ public class UserPostgresQLRepositoryTest extends TestContainerInitializer{
      * @param userDto the user request DTO
      */
     @Test
-    void shouldFindByUserName(UserRequestDto userDto){
+    void shouldFindByUserName(UserRequestProtos.UserRequestDto userDto){
         User userRepositoryByName = userRepository.findByName(userDto.getUsername());
         System.out.println("userRepositoryByName = " + userRepositoryByName);
         User buildUser = UserBuild.buildUserWithId(userDto);
