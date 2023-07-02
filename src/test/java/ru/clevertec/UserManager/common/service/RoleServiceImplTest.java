@@ -16,7 +16,9 @@ import ru.clevertec.UserManager.service.role.RoleApiService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
 import static ru.clevertec.UserManager.common.utill.UserBuild.getRole;
 
 /**
@@ -51,7 +53,6 @@ public class RoleServiceImplTest {
             assertEquals(role, roleApiService.findRoleByName(userDto.getRole()));
             verify(roleRepository, times(1)).findRoleByName(userDto.getRole());
         }
-
     }
 
     /**
@@ -78,6 +79,5 @@ public class RoleServiceImplTest {
             assertThrows(IllegalArgumentException.class,
                     () -> roleApiService.findRoleByName(userDto.getRole()));
         }
-
     }
 }

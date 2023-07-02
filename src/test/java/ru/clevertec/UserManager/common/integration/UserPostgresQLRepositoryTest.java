@@ -1,6 +1,9 @@
 package ru.clevertec.UserManager.common.integration;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -13,6 +16,8 @@ import ru.clevertec.UserManager.common.utill.UserBuild;
 import ru.clevertec.UserManager.dto.UserRequestProtos;
 import ru.clevertec.UserManager.entity.User;
 import ru.clevertec.UserManager.repository.UserRepository;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Integration test class for the UserRepository.
@@ -49,7 +54,7 @@ public class UserPostgresQLRepositoryTest extends TestContainerInitializer{
         int activeUserName = userRepository.existActiveUserName(userDto.getUsername());
         testEntityManager.flush();
         testEntityManager.getEntityManager().getTransaction().commit();
-       Assertions.assertEquals(1, activeUserName);
+      assertEquals(1, activeUserName);
     }
 
     /**
@@ -64,6 +69,6 @@ public class UserPostgresQLRepositoryTest extends TestContainerInitializer{
         System.out.println("buildUser = " + buildUser);
         testEntityManager.flush();
         testEntityManager.getEntityManager().getTransaction().commit();
-        Assertions.assertEquals(userRepositoryByName, buildUser );
+        assertEquals(userRepositoryByName, buildUser );
     }
 }

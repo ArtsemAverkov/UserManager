@@ -24,7 +24,6 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> {
                     auth.anyRequest().permitAll();
-                   // auth.requestMatchers("/users/authenticate/{token}", "/users/create/**").permitAll();
                 })
                 .csrf().disable();
         return http.build();

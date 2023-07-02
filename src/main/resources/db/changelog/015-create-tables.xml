@@ -12,7 +12,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="createTableUsers" author="ArtsemAverkov">
+    <changeSet id="createTableUsers" author="ArtemAverkov">
         <createTable tableName="users">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
@@ -23,7 +23,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="addForeignKey" author="ArtsemAverkov">
+    <changeSet id="addForeignKey" author="ArtemAverkov">
         <addForeignKeyConstraint baseTableName="users"
                                  baseColumnNames="role_id"
                                  referencedTableName="roles"

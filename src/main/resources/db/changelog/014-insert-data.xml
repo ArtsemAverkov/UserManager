@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet id="insertData" author="ArtemAverkovs">
+        <insert tableName="roles">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="ADMIN"/>
+        </insert>
+
+        <insert tableName="roles">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="JOURNALIST"/>
+        </insert>
+
+        <insert tableName="roles">
+            <column name="id" valueNumeric="3"/>
+            <column name="name" value="SUBSCRIBER"/>
+        </insert>
+
+        <insert tableName="users">
+            <column name="id" valueNumeric="1"/>
+            <column name="username" value="admin"/>
+            <column name="password" value="admin"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+
+        <insert tableName="users">
+            <column name="id" valueNumeric="2"/>
+            <column name="username" value="Artsem"/>
+            <column name="password" value="password"/>
+            <column name="role_id" valueNumeric="2"/>
+        </insert>
+
+        <insert tableName="users">
+            <column name="id" valueNumeric="3"/>
+            <column name="username" value="Vlad"/>
+            <column name="password" value="password"/>
+            <column name="role_id" valueNumeric="2"/>
+        </insert>
+
+        <insert tableName="users">
+            <column name="id" valueNumeric="4"/>
+            <column name="username" value="Andrei"/>
+            <column name="password" value="password"/>
+            <column name="role_id" valueNumeric="2"/>
+        </insert>
+
+        <insert tableName="users">
+            <column name="id" valueNumeric="5"/>
+            <column name="username" value="Aleksei"/>
+            <column name="password" value="password"/>
+            <column name="role_id" valueNumeric="2"/>
+        </insert>
+
+        <insert tableName="users">
+            <column name="id" valueNumeric="6"/>
+            <column name="username" value="Dmintriy"/>
+            <column name="password" value="password"/>
+            <column name="role_id" valueNumeric="2"/>
+        </insert>
+
+        <insert tableName="users">
+            <column name="id" valueNumeric="7"/>
+            <column name="username" value="user2"/>
+            <column name="password" value="password2"/>
+            <column name="role_id" valueNumeric="3"/>
+        </insert>
+
+        <insert tableName="users">
+            <column name="id" valueNumeric="8"/>
+            <column name="username" value="ArtsemAA"/>
+            <column name="password" value="password2"/>
+            <column name="role_id" valueNumeric="3"/>
+        </insert>
+
+        <insert tableName="users">
+            <column name="id" valueNumeric="9"/>
+            <column name="username" value="AndreiMK"/>
+            <column name="password" value="password2"/>
+            <column name="role_id" valueNumeric="3"/>
+        </insert>
+
+        <insert tableName="users">
+            <column name="id" valueNumeric="10"/>
+            <column name="username" value="VladKN"/>
+            <column name="password" value="password2"/>
+            <column name="role_id" valueNumeric="3"/>
+        </insert>
+
+        <insert tableName="users">
+            <column name="id" valueNumeric="11"/>
+            <column name="username" value="DmitriyBR"/>
+            <column name="password" value="password2"/>
+            <column name="role_id" valueNumeric="3"/>
+        </insert>
+
+        <insert tableName="users">
+            <column name="id" valueNumeric="12"/>
+            <column name="username" value="DenisBA"/>
+            <column name="password" value="password2"/>
+            <column name="role_id" valueNumeric="3"/>
+        </insert>
+
+        <insert tableName="users">
+            <column name="id" valueNumeric="13"/>
+            <column name="username" value="VladimirGA"/>
+            <column name="password" value="password2"/>
+            <column name="role_id" valueNumeric="3"/>
+        </insert>
+
+        <insert tableName="users">
+            <column name="id" valueNumeric="14"/>
+            <column name="username" value="AntonKA"/>
+            <column name="password" value="password2"/>
+            <column name="role_id" valueNumeric="3"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
